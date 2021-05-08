@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from random import random
+from myJson.maniJson import lerArquivo, criarArquivo
 
 usuario = str(input('Nome de usuário: '))
 senha = str(input('Senha: '))
@@ -54,5 +55,20 @@ while True:
     else:
         break
 
+# ORGANIZAR DADOS E MANIPULAR ARQUIVO
+lista_seguidores = list()  # Lista que será usada no arquivo .json mais para frente.
 for seguidor in seguidores:
-    print(seguidor.text)
+    lista_seguidores.append(seguidor.text)
+
+driver.close()
+
+json_usuario = {
+    "user": analisando,
+    "seguidores-antes": [],
+    "seguidores-depois": lista_seguidores
+}
+
+if not lerArquivo(analisando):
+    criarArquivo(analisando, json_usuario)
+
+print(lerArquivo(analisando))
