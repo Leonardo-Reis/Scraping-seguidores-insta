@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from random import random
-from myJson.maniJson import lerArquivo, criarArquivo
+from myJson.maniJson import lerArquivo, escreverArquivo
 
 usuario = str(input('Nome de usuário: '))
 senha = str(input('Senha: '))
@@ -37,8 +37,8 @@ sleep(4)
 # LER SEGUIDORES
 driver.get(url + analisando)
 sleep(3)
-numero_seguidores = int(driver.find_element_by_xpath('//a[@href="/leonardo_creis/followers/"]//span[@class="g47SY "]').text)
-botao_seguidores = driver.find_element_by_xpath('//a[@href="/leonardo_creis/followers/"]')
+numero_seguidores = int(driver.find_element_by_xpath(f'//a[@href="/{analisando}/followers/"]//span[@class="g47SY "]').text)
+botao_seguidores = driver.find_element_by_xpath(f'//a[@href="/{analisando}/followers/"]')
 botao_seguidores.send_keys(Keys.ENTER)
 
 sleep(2)
@@ -62,13 +62,15 @@ for seguidor in seguidores:
 
 driver.close()
 
-json_usuario = {
-    "user": analisando,
-    "seguidores-antes": [],
-    "seguidores-depois": lista_seguidores
-}
-
-if not lerArquivo(analisando):
-    criarArquivo(analisando, json_usuario)
-
-print(lerArquivo(analisando))
+if lerArquivo(analisando):
+    user_json = lerArquivo(analisando)
+    user_json['seguidores-antes'] = user_json['seguidores-depois']
+    user_json['seguidores-depois'] = lista_seguidores
+    escreverArquivo(analisando, user_json)
+else:
+    json_usuario = {
+        "user": analisando,
+        "seguidores-antes": [],
+        "seguidores-depois": lista_seguidores
+    }
+    escreverArquivo(analisando, json_usuario)
