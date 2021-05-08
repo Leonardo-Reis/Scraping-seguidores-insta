@@ -37,7 +37,8 @@ sleep(4)
 # LER SEGUIDORES
 driver.get(url + analisando)
 sleep(3)
-numero_seguidores = int(driver.find_element_by_xpath(f'//a[@href="/{analisando}/followers/"]//span[@class="g47SY "]').text)
+numero_seguidores = int(
+    driver.find_element_by_xpath(f'//a[@href="/{analisando}/followers/"]//span[@class="g47SY "]').text)
 botao_seguidores = driver.find_element_by_xpath(f'//a[@href="/{analisando}/followers/"]')
 botao_seguidores.send_keys(Keys.ENTER)
 
@@ -74,3 +75,25 @@ else:
         "seguidores-depois": lista_seguidores
     }
     escreverArquivo(analisando, json_usuario)
+
+deixaram_seguir = list()
+comecaram_seguir = list()
+try:
+    if user_json['seguidores-depois'] == user_json['seguidores-antes']:
+        print(f'\nNinguém deixou ou passou a seguir {analisando}')
+    else: # Eu sei, Big-O chora infelizmente.
+        for nome in user_json['seguidores-depois']:
+            if nome not in user_json['seguidores-antes']:
+                comecaram_seguir.append(nome)
+        for nome in user_json['seguidores-antes']:
+            if nome not in user_json['seguidores-depois']:
+                deixaram_seguir.append(nome)
+
+        print(f'\nDeixaram de seguir: ')
+        for nome in deixaram_seguir:
+            print(nome)
+        print(f'\nComeçaram a seguir: ')
+        for nome in comecaram_seguir:
+            print(nome)
+except:
+    pass
