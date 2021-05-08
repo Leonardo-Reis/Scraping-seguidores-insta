@@ -76,6 +76,7 @@ else:
     }
     escreverArquivo(analisando, json_usuario)
 
+# ANALISAR QUEM DEIXOU E COMECOU A SEGUIR
 deixaram_seguir = list()
 comecaram_seguir = list()
 try:
